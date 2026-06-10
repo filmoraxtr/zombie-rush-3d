@@ -13,8 +13,12 @@ jobs:
           distribution: 'temurin'
       - name: APK Build
         run: |
+          echo "Repodaki dosyalar:" && ls -la
           unzip -o -q ZombieRush3D*.zip
-          PROJE=$(find . -maxdepth 1 -type d -name "ZombieRush3D_v*" | head -1)
+          echo "Acilan icerik:" && ls -la
+          SG=$(find . -maxdepth 2 -name "settings.gradle" | head -1)
+          if [ -z "$SG" ]; then echo "HATA: Proje bulunamadi! Yanlis ZIP yuklenmis olabilir."; exit 1; fi
+          PROJE=$(dirname "$SG")
           echo "Bulunan proje: $PROJE"
           sed -i '/appcompat/d' "$PROJE/app/build.gradle"
           wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
