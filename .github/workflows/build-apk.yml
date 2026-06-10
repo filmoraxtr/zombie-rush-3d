@@ -7,27 +7,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: ZIP ac
-        run: |
-          unzip -o -q ZombieRush3D*.zip
-          PROJE=$(ls -d ZombieRush3D_v*/ | head -1)
-          echo "PROJE=$PROJE" >> $GITHUB_ENV
-          echo "Bulunan proje: $PROJE"
-      - name: Gereksiz kutuphaneyi kaldir
-        run: sed -i '/appcompat/d' ${PROJE}app/build.gradle
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Gradle indir
-        run: |
-          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
-          unzip -q gradle-8.5-bin.zip
       - name: APK Build
         run: |
-          cd $PROJE
-          ../gradle-8.5/bin/gradle assembleDebug --no-daemon
+          unzip -o -q ZombieRush3D*.zip
+          PROJE=$(find . -maxdepth 1 -type d -name "ZombieRush3D_v*" | head -1)
+          echo "Bulunan proje: $PROJE"
+          sed -i '/appcompat/d' "$PROJE/app/build.gradle"
+          wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
+          unzip -q gradle-8.5-bin.zip
+          GRADLE=$(pwd)/gradle-8.5/bin/gradle
+          cd "$PROJE"
+          "$GRADLE" assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: ZombieRush3D-APK
-          path: '*/app/build/outputs/apk/debug/app-debug.apk'
+          path: '**/app/build/outputs/apk/debug/app-debug.apk'
