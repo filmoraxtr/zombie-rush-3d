@@ -8,11 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: ZIP ac
-        run: unzip -o -q ZombieRush3D_v2*.zip
-      - name: Gereksiz kutuphaneyi kaldir
         run: |
-          sed -i '/appcompat/d' ZombieRush3D_v2/app/build.gradle
-          cat ZombieRush3D_v2/app/build.gradle
+          unzip -o -q ZombieRush3D*.zip
+          PROJE=$(ls -d ZombieRush3D_v*/ | head -1)
+          echo "PROJE=$PROJE" >> $GITHUB_ENV
+          echo "Bulunan proje: $PROJE"
+      - name: Gereksiz kutuphaneyi kaldir
+        run: sed -i '/appcompat/d' ${PROJE}app/build.gradle
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -23,9 +25,9 @@ jobs:
           unzip -q gradle-8.5-bin.zip
       - name: APK Build
         run: |
-          cd ZombieRush3D_v2
-          ../gradle-8.5/bin/gradle assembleDebug --no-daemon --stacktrace
+          cd $PROJE
+          ../gradle-8.5/bin/gradle assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: ZombieRush3D-APK
-          path: ZombieRush3D_v2/app/build/outputs/apk/debug/app-debug.apk
+          path: '*/app/build/outputs/apk/debug/app-debug.apk'
