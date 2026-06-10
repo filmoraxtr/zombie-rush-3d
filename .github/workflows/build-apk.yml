@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ZIP dosyasını aç
-        run: unzip ZombieRush3D_Android_Project_v3_8_REAL_IMAGE_WEAPON_SPRITE_FIX.zip
+        run: unzip ZombieRush3D_Android_Project_v3_9_WEAPON_CLEAN_RESET.zip
 
       - name: Java kur
         uses: actions/setup-java@v4
@@ -25,11 +25,11 @@ jobs:
 
       - name: APK oluştur
         run: |
-          cd ZombieRush3D_Android_Project_v3_8_REAL_IMAGE_WEAPON_SPRITE_FIX
+          cd ZombieRush3D_Android_Project_v3_9_WEAPON_CLEAN_RESET
           gradle assembleDebug
 
       - name: APK dosyasını yükle
         uses: actions/upload-artifact@v4
         with:
-          name: ZombieRush3D-v3-8-REAL-IMAGE-WEAPON-SPRITE-FIX-debug-apk
-          path: ZombieRush3D_Android_Project_v3_8_REAL_IMAGE_WEAPON_SPRITE_FIX/app/build/outputs/apk/debug/*.apk
+          name: ZombieRush3D-v3-9-WEAPON-CLEAN-RESET-debug-apk
+          path: ZombieRush3D_Android_Project_v3_9_WEAPON_CLEAN_RESET/app/build/outputs/apk/debug/*.apk
